@@ -11,6 +11,7 @@
       >
         <label :for="`${cred.name}Input`">{{ cred.title }}</label>
         <input
+          v-model="inputCredentials[cred.name]"
           :id="`${cred.name}Input`"
           :aria-describedby="`${cred.name}Help`"
           type="text"
@@ -58,15 +59,20 @@ export default {
       credentials: null,
       redirectUri: null,
       state: null,
-      error: null
+      error: null,
+      inputCredentials: {}
     }
   },
   methods: {
     authenticate(e) {
-      console.log(e)
+      const credentials = {}
+      for (const cred of this.credentials) {
+        credentials[cred.name] = this.inputCredentials[cred.name] || ''
+      }
       const codeData = {
         expiresAt: getUTCtimestamp() + 60,
-        type: 'code'
+        type: 'code',
+        credentials: credentials
       }
       this.redirectUri.searchParams.set('code', b64encode(JSON.stringify(codeData)))
       this.redirectUri.searchParams.set('state', this.state)
