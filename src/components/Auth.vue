@@ -70,8 +70,7 @@ export default {
         credentials[cred.name] = this.inputCredentials[cred.name] || ''
       }
       const codeData = {
-        expiresAt: getUTCtimestamp() + 60,
-        type: 'code',
+        createdAt: getUTCtimestamp(),
         credentials: credentials
       }
       this.redirectUri.searchParams.set('code', b64encode(JSON.stringify(codeData)))
